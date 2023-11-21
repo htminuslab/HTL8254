@@ -1,0 +1,7 @@
+cemodule.vhd
+ctrlword.vhd
+ctrlout.vhd
+gateclk.vhd
+edge3ff.vhd
+timer.vhd
+htl8254.vhd

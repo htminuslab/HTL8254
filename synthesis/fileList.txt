@@ -1,0 +1,6 @@
+../rtl/cemodule.vhd
+../rtl/ctrlword.vhd
+../rtl/ctrlout.vhd
+../rtl/gateclk.vhd
+../rtl/timer.vhd
+../rtl/htl8254.vhd

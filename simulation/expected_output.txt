@@ -1,0 +1,464 @@
+#  run -all 
+# ======= Test1 Mode0 CNT0, Status after reset =======
+# Status0 : OUT=0 NULL_CNT=0 LMSB MODE0 BINARY CNT=0000
+# Status1 : OUT=0 NULL_CNT=0 LMSB MODE0 BINARY CNT=0000
+# Status2 : OUT=0 NULL_CNT=0 LMSB MODE0 BINARY CNT=0000
+# ======= Test2 Mode0 CNT0, LSB only, Binary =======
+# -- Writing 3 to Count Register LSB 
+# Counter Element 0 = 0000 OUT0=0
+# Counter Element 0 = 0003 OUT0=0
+# Counter Element 0 = 0002 OUT0=0
+# Counter Element 0 = 0001 OUT0=0
+# Counter Element 0 = 0000 OUT0=1
+# ======= Test3 Mode0 CNT0, MSB only, Binary =======
+# -- Writing 3 to Count Register MSB (LSB defaults to 0)
+# Counter Element 0 = FFFF OUT0=0
+# Counter Element 0 = 0300 OUT0=0
+# Counter Element 0 = 02FF OUT0=0
+# -- Wait for counter to reach 0002
+# Counter Element 0 = 0002 OUT0=0
+# Counter Element 0 = 0001 OUT0=0
+# Counter Element 0 = 0000 OUT0=1
+# ======= Test4 Mode0 CNT0, LSB/MSB, Binary =======
+# -- Writing first byte, counting should be disabled
+# Counter Element 0 = FFFF OUT0=0
+# Counter Element 0 = FFFF OUT0=0
+# Counter Element 0 = FFFF OUT0=0
+# Counter Element 0 = FFFF OUT0=0
+# Counter Element 0 = FFFF OUT0=0
+# -- Writing second MSB byte, Counter=0102, enable counting on first clk pulse
+# Counter Element 0 = FFFF OUT0=0
+# Counter Element 0 = 0102 OUT0=0
+# Counter Element 0 = 0101 OUT0=0
+# Counter Element 0 = 0100 OUT0=0
+# Counter Element 0 = 00FF OUT0=0
+# -- Wait for counter to reach 0002
+# Counter Element 0 = 0002 OUT0=0
+# Counter Element 0 = 0001 OUT0=0
+# Counter Element 0 = 0000 OUT0=1
+# Counter Element 0 = FFFF OUT0=1
+# ======= Test5 Mode0 CNT0, LSB/MSB, BCD =======
+# -- Writing 0102 to Count Register
+# Counter Element 0 = FFFE OUT0=0
+# Counter Element 0 = 0102 OUT0=0
+# Counter Element 0 = 0101 OUT0=0
+# Counter Element 0 = 0100 OUT0=0
+# Counter Element 0 = 0099 OUT0=0
+# -- Wait for counter to reach 0002
+# Counter Element 0 = 0002 OUT0=0
+# Counter Element 0 = 0001 OUT0=0
+# Counter Element 0 = 0000 OUT0=1
+# Counter Element 0 = 9999 OUT0=1
+# ======= Test6 Mode0 CNT0, LSB/MSB, Counter Latch command =======
+# -- Writing 1234 to Count Register
+# Counter Element 0 = 9998 OUT0=0
+# Counter Element 0 = 1234 OUT0=0
+# Counter Element 0 = 1233 OUT0=0
+# -- Issue Counter Latch command
+# Counter Element 0 = 1232 OUT0=0
+# Counter Element 0 = 1231 OUT0=0
+# Counter Element 0 = 1230 OUT0=0
+# Latched Counter Element = 1232
+# Counter Element 0 = 122F OUT0=0
+# Counter Element 0 = 122E OUT0=0
+# Counter Element 0 = 122D OUT0=0
+# ======= Test7 Mode0 CNT0, LSB/MSB, BCD, Multiple Counter Latch commands =======
+# -- Writing 2002 to Count Register
+# Counter Element 0 = 122C OUT0=0
+# Counter Element 0 = 2002 OUT0=0
+# Counter Element 0 = 2001 OUT0=0
+# -- Issue First Counter Latch command
+# Counter Element 0 = 2000 OUT0=0
+# Counter Element 0 = 1999 OUT0=0
+# Counter Element 0 = 1998 OUT0=0
+# -- Issue Second Counter Latch command (should be ignored)
+# Counter Element 0 = 1997 OUT0=0
+# Counter Element 0 = 1996 OUT0=0
+# Counter Element 0 = 1995 OUT0=0
+# Latched Counter Element = 2000
+# Counter Element 0 = 1994 OUT0=0
+# Counter Element 0 = 1993 OUT0=0
+# Counter Element 0 = 1992 OUT0=0
+# ======= Test8 Mode0 CNT0, LSB/MSB, Counter Latch command (slow read) =======
+# -- Writing 2002 to Count Register
+# Counter Element 0 = 1991 OUT0=0
+# Counter Element 0 = 1202 OUT0=0
+# Counter Element 0 = 1201 OUT0=0
+# -- Issue Counter Latch command
+# Counter Element 0 = 1200 OUT0=0
+# Counter Element 0 = 11FF OUT0=0
+# Counter Element 0 = 11FE OUT0=0
+# Latched Counter LSB Element = 00
+# Counter Element 0 = 11FD OUT0=0
+# Counter Element 0 = 11FC OUT0=0
+# Counter Element 0 = 11FB OUT0=0
+# Latched Counter MSB Element = 12
+# Counter Element 0 = 11FA OUT0=0
+# Counter Element 0 = 11F9 OUT0=0
+# ======= Test9 Read Counter0 without a Counter Latch command =======
+# Read Counter0 = F8
+# Read Counter0 = 11
+# Read Counter0 = F8
+# Read Counter0 = 11
+# Read Counter0 = F8
+# ======= Test10 Read-Back command (all values for counter0) =======
+# Status0 : OUT=0 NULL_CNT=1 LSB  MODE0 BINARY CNT=F8
+# Status0 : OUT=0 NULL_CNT=1 LSB  MODE0 BCD    CNT=F8
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE1 BINARY CNT=F8
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE1 BCD    CNT=F8
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE2 BINARY CNT=F8
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE2 BCD    CNT=F8
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE3 BINARY CNT=F8
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE3 BCD    CNT=F8
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE4 BINARY CNT=F7
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE4 BCD    CNT=F7
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE5 BINARY CNT=F7
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE5 BCD    CNT=F7
+# Status0 : OUT=0 NULL_CNT=1 MSB  MODE0 BINARY CNT=11
+# Status0 : OUT=0 NULL_CNT=1 MSB  MODE0 BCD    CNT=11
+# Status0 : OUT=1 NULL_CNT=1 MSB  MODE1 BINARY CNT=11
+# Status0 : OUT=1 NULL_CNT=1 MSB  MODE1 BCD    CNT=11
+# Status0 : OUT=1 NULL_CNT=1 MSB  MODE2 BINARY CNT=11
+# Status0 : OUT=1 NULL_CNT=1 MSB  MODE2 BCD    CNT=11
+# Status0 : OUT=1 NULL_CNT=1 MSB  MODE3 BINARY CNT=11
+# Status0 : OUT=1 NULL_CNT=1 MSB  MODE3 BCD    CNT=11
+# Status0 : OUT=1 NULL_CNT=1 MSB  MODE4 BINARY CNT=11
+# Status0 : OUT=1 NULL_CNT=1 MSB  MODE4 BCD    CNT=11
+# Status0 : OUT=1 NULL_CNT=1 MSB  MODE5 BINARY CNT=11
+# Status0 : OUT=1 NULL_CNT=1 MSB  MODE5 BCD    CNT=11
+# Status0 : OUT=0 NULL_CNT=1 LMSB MODE0 BINARY CNT=11F6
+# Status0 : OUT=0 NULL_CNT=1 LMSB MODE0 BCD    CNT=11F6
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE1 BINARY CNT=11F6
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE1 BCD    CNT=11F6
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE2 BINARY CNT=11F6
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE2 BCD    CNT=11F6
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE3 BINARY CNT=11F6
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE3 BCD    CNT=11F6
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE4 BINARY CNT=11F6
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE4 BCD    CNT=11F6
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE5 BINARY CNT=11F5
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE5 BCD    CNT=11F5
+# ======= Test11 Multiple Read-Back commands =======
+# -- Write 99 to Counter 0 (LSB only)
+# Counter Element 0 = 11F5 OUT0=0
+# Counter Element 0 = 0099 OUT0=0
+# Counter Element 0 = 0098 OUT0=0
+# -- Issue Read-Back Command, but do not yet read it 
+# Counter Element 0 = 0097 OUT0=0
+# Counter Element 0 = 0096 OUT0=0
+# Counter Element 0 = 0095 OUT0=0
+# -- Issue Read-Back Command, this one should be ignored
+# Read Latch Counter 0 value = 97
+# Counter Element 0 = 0094 OUT0=0
+# Counter Element 0 = 0093 OUT0=0
+# Counter Element 0 = 0092 OUT0=0
+# -- Initialise for LSB/MSB
+# -- Write 1004 to Counter 0
+# Counter Element 0 = 0091 OUT0=0
+# Counter Element 0 = 1004 OUT0=0
+# Counter Element 0 = 1003 OUT0=0
+# Counter Element 0 = 1002 OUT0=0
+# -- Issue Read-Back Command, but do not yet read it 
+# Counter Element 0 = 1001 OUT0=0
+# Counter Element 0 = 1000 OUT0=0
+# Counter Element 0 = 0FFF OUT0=0
+# Counter Element 0 = 0FFE OUT0=0
+# Read Latch Counter 0 value (should be 1001) = 1001
+# Counter Element 0 = 0FFD OUT0=0
+# Counter Element 0 = 0FFC OUT0=0
+# Counter Element 0 = 0FFB OUT0=0
+# Counter Element 0 = 0FFA OUT0=0
+# ======= Test12 Mode0 CNT0, LSB, Null Count =======
+# -- Writing to Control Register, NULL Count should be 1 
+# Reading Null Count status counter0 = 1
+# -- Writing 8 to Count Register, NULL Count should be 1 
+# Reading Null Count status counter0 = 1
+# -- New count loaded (CR->CE), NULL Count should be 0
+# Reading Null Count status counter0 = 0
+# Counter Element 0 = 0008 OUT0=0
+# Counter Element 0 = 0007 OUT0=0
+# Counter Element 0 = 0006 OUT0=0
+# ======= Test13 Mode0 CNT0, LSB/MSB, Null Count =======
+# -- Writing to Control Register, NULL Count should be 1 
+# Reading Null Count status counter0 = 1
+# -- Writing 34 to LSB Count Register, NULL Count should remain 1 
+# Reading Null Count status counter0 = 1
+# -- Writing 12 to MSB Count Register, NULL Count should be 1 
+# Reading Null Count status counter0 = 1
+# -- New count loaded (CR->CE), NULL Count should change to 0
+# Reading Null Count status counter0 = 0
+# Counter Element 0 = 1234 OUT0=0
+# Counter Element 0 = 1233 OUT0=0
+# Counter Element 0 = 1232 OUT0=0
+# ======= Test14 Read-Write programming Sequence 1 =======
+# Status0 : OUT=1 NULL_CNT=0 LMSB MODE2 BCD    CNT=4433
+# Status1 : OUT=1 NULL_CNT=0 LMSB MODE3 BINARY CNT=0000
+# Status2 : OUT=1 NULL_CNT=0 LMSB MODE4 BCD    CNT=6611
+# ======= Test15 Read-Write programming Sequence 2 =======
+# Status0 : OUT=1 NULL_CNT=0 LMSB MODE4 BINARY CNT=6611
+# Status1 : OUT=1 NULL_CNT=0 LMSB MODE3 BCD    CNT=5522
+# Status2 : OUT=1 NULL_CNT=0 LMSB MODE2 BINARY CNT=4433
+# ======= Test16 Read-Write programming Sequence 3 =======
+# Status0 : OUT=1 NULL_CNT=0 LMSB MODE2 BCD    CNT=4433
+# Status1 : OUT=1 NULL_CNT=0 LMSB MODE3 BINARY CNT=5522
+# Status2 : OUT=1 NULL_CNT=0 LMSB MODE4 BCD    CNT=6611
+# ======= Test17 Read-Write programming Sequence 4 =======
+# Status0 : OUT=1 NULL_CNT=0 LMSB MODE4 BINARY CNT=6611
+# Status1 : OUT=1 NULL_CNT=0 LMSB MODE3 BCD    CNT=5522
+# Status2 : OUT=1 NULL_CNT=0 LMSB MODE2 BINARY CNT=4433
+# ======= Test18 Test CNT0, Mode0 GATE signal =======
+# -- Setting Mode0 to LSB only, gate0=0
+# -- After writing control word counter should stop
+# Counter Element 0 = 6610 OUT0=0
+# Counter Element 0 = 6610 OUT0=0
+# Counter Element 0 = 6610 OUT0=0
+# Counter Element 0 = 6610 OUT0=0
+# Status0 : OUT=0 NULL_CNT=1 LSB  MODE0 BINARY CNT=10
+# -- After writing counter=99,  counting is controlled by the gate0 signal
+# Counter Element 0 = 6610 OUT0=0
+# Counter Element 0 = 0099 OUT0=0
+# Counter Element 0 = 0099 OUT0=0
+# Counter Element 0 = 0099 OUT0=0
+# -- Assert gate0, enable counting
+# Counter Element 0 = 0099 OUT0=0
+# Counter Element 0 = 0098 OUT0=0
+# Counter Element 0 = 0097 OUT0=0
+# Counter Element 0 = 0096 OUT0=0
+# -- Negate gate0, disable counting
+# Counter Element 0 = 0095 OUT0=0
+# Counter Element 0 = 0095 OUT0=0
+# Counter Element 0 = 0095 OUT0=0
+# Counter Element 0 = 0095 OUT0=0
+# -- Setting Mode0 to LSB/MSB, counting starts after writing MSB, gate0=0
+# -- Writing control register
+# Counter Element 0 = 0095 OUT0=0
+# Counter Element 0 = 0095 OUT0=0
+# Counter Element 0 = 0095 OUT0=0
+# Counter Element 0 = 0095 OUT0=0
+# -- Writing LSB=99, counter should remain constant
+# Counter Element 0 = 0095 OUT0=0
+# Counter Element 0 = 0095 OUT0=0
+# Counter Element 0 = 0095 OUT0=0
+# Counter Element 0 = 0095 OUT0=0
+# -- Writing MSB=02, counter controlled by gate0
+# Counter Element 0 = 0095 OUT0=0
+# Counter Element 0 = 0299 OUT0=0
+# Counter Element 0 = 0299 OUT0=0
+# Counter Element 0 = 0299 OUT0=0
+# -- Assert gate0, enable counting 
+# Counter Element 0 = 0299 OUT0=0
+# Counter Element 0 = 0298 OUT0=0
+# Counter Element 0 = 0297 OUT0=0
+# Counter Element 0 = 0296 OUT0=0
+# -- Negate gate0, disable counting 
+# Counter Element 0 = 0295 OUT0=0
+# Counter Element 0 = 0295 OUT0=0
+# Counter Element 0 = 0295 OUT0=0
+# Counter Element 0 = 0295 OUT0=0
+# ======= Test19 Test Mode1 Rising Edge Gate Trigger =======
+# -- Gate is low before writing to control word
+# -- Write 1234 to Counter 0, counter should remain constant 'N' in datasheets
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE1 BCD    CNT=0295
+# Counter Element 0 = 0295 OUT0=1
+# Counter Element 0 = 0295 OUT0=1
+# Counter Element 0 = 0295 OUT0=1
+# -- Gate is asserted, counter should reload to 1234 and starts counting.....
+# Counter Element 0 = 0295 OUT0=1
+# Counter Element 0 = 1234 OUT0=0
+# Counter Element 0 = 1233 OUT0=0
+# Counter Element 0 = 1232 OUT0=0
+# -- Gate is asserted again, counter should reload to 1234
+# Counter Element 0 = 1230 OUT0=0
+# Counter Element 0 = 1234 OUT0=0
+# Counter Element 0 = 1233 OUT0=0
+# Counter Element 0 = 1232 OUT0=0
+# ======= Test20 Test CNT0, Mode2 GATE signal =======
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE2 BINARY CNT=31
+# -- Assert gate0, enable counting 
+# Counter Element 0 = 1231 OUT0=1
+# Counter Element 0 = 0099 OUT0=1
+# Counter Element 0 = 0098 OUT0=1
+# Counter Element 0 = 0097 OUT0=1
+# -- Negate gate0, disable counting 
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0095 OUT0=1
+# Counter Element 0 = 0095 OUT0=1
+# Counter Element 0 = 0095 OUT0=1
+# Counter Element 0 = 0095 OUT0=1
+# ======= Test21 Test CNT0, Mode3 GATE signal =======
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE3 BINARY CNT=95
+# -- Assert gate0, enable counting 
+# Counter Element 0 = 0095 OUT0=1
+# Counter Element 0 = 0099 OUT0=1
+# Counter Element 0 = 0098 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# -- Negate gate0, disable counting 
+# Counter Element 0 = 0094 OUT0=1
+# Counter Element 0 = 0094 OUT0=1
+# Counter Element 0 = 0094 OUT0=1
+# Counter Element 0 = 0094 OUT0=1
+# -- Assert gate0, reload initial value (99)
+# Counter Element 0 = 0094 OUT0=1
+# Counter Element 0 = 0099 OUT0=1
+# Counter Element 0 = 0098 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# ======= Test22 Test CNT0, Mode4 GATE signal =======
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE4 BINARY CNT=94
+# -- Assert gate0, enable counting 
+# Counter Element 0 = 0094 OUT0=1
+# Counter Element 0 = 0099 OUT0=1
+# Counter Element 0 = 0098 OUT0=1
+# Counter Element 0 = 0097 OUT0=1
+# -- Negate gate0, disable counting 
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# ======= Test23 Test CNT0, Mode5 Rising Edge Gate triggers counting =======
+# -- Gate is high before writing to control word
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE5 BCD    CNT=96
+# -- Write 99 to Counter 0, counting is inhibited until rising edge gate
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# -- Gate is negated, counting still inhibited.....
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# -- Gate is asserted (rising edge), counter loads and starts counting
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0099 OUT0=1
+# Counter Element 0 = 0098 OUT0=1
+# Counter Element 0 = 0097 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0095 OUT0=1
+# Counter Element 0 = 0094 OUT0=1
+# Counter Element 0 = 0093 OUT0=1
+# Counter Element 0 = 0092 OUT0=1
+# Counter Element 0 = 0091 OUT0=1
+# Counter Element 0 = 0090 OUT0=1
+# Counter Element 0 = 0089 OUT0=1
+# Counter Element 0 = 0088 OUT0=1
+# Counter Element 0 = 0087 OUT0=1
+# -- Assert gate0 (rising edge), reload initial value (99)
+# Counter Element 0 = 0086 OUT0=1
+# Counter Element 0 = 0099 OUT0=1
+# Counter Element 0 = 0098 OUT0=1
+# Counter Element 0 = 0097 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# ======= Test24 Test CNT0, Check OUT signal after MODE write =======
+# Mode0 OUT should be 0, OUT0=0
+# Mode1 OUT should be 1, OUT0=1
+# Mode2 OUT should be 1, OUT0=1
+# Mode3 OUT should be 1, OUT0=1
+# Mode4 OUT should be 1, OUT0=1
+# Mode5 OUT should be 1, OUT0=1
+# ======= Test25 Test Mode3 CNT0 Even Initial Value =======
+# -- Writing 04 to Counter 0, expect the following sequence N,4,2,4,2.....
+# Counter Element 0 = 0094 OUT0=1
+# Counter Element 0 = 0004 OUT0=1
+# Counter Element 0 = 0002 OUT0=1
+# Counter Element 0 = 0004 OUT0=0
+# Counter Element 0 = 0002 OUT0=0
+# Counter Element 0 = 0004 OUT0=1
+# Counter Element 0 = 0002 OUT0=1
+# Counter Element 0 = 0004 OUT0=0
+# Counter Element 0 = 0002 OUT0=0
+# Counter Element 0 = 0004 OUT0=1
+# Counter Element 0 = 0002 OUT0=1
+# Counter Element 0 = 0004 OUT0=0
+# ======= Test26 Test Mode3 CNT0 Odd Initial Value =======
+# -- Writing 05 to Counter 0, expect the following sequence N,5,4,2,5,2,5,4,2,5,2.....
+# Counter Element 0 = 0002 OUT0=1
+# Counter Element 0 = 0005 OUT0=1
+# Counter Element 0 = 0004 OUT0=1
+# Counter Element 0 = 0002 OUT0=1
+# Counter Element 0 = 0005 OUT0=0
+# Counter Element 0 = 0002 OUT0=0
+# Counter Element 0 = 0005 OUT0=1
+# Counter Element 0 = 0004 OUT0=1
+# Counter Element 0 = 0002 OUT0=1
+# Counter Element 0 = 0005 OUT0=0
+# Counter Element 0 = 0002 OUT0=0
+# Counter Element 0 = 0005 OUT0=1
+# Counter Element 0 = 0004 OUT0=1
+# Counter Element 0 = 0002 OUT0=1
+# Counter Element 0 = 0005 OUT0=0
+# Counter Element 0 = 0002 OUT0=0
+# ======= Test27 Mode0 CNT0=0, gate=0, LSB/MSB, Binary =======
+# -- Wait for counter to reach 0000 (will take some time....)
+# ======= Test28 Mode1 CNT0=0, gate=0, LSB/MSB, Binary =======
+# -- Generate gate pulse, this will load the counter with 0000
+# ======= Test29 Mode5 CNT0=0, gate=0, LSB/MSB, Binary =======
+# -- Wait for counter to reach 0000 (will take some time....)
+# ======= Test30 Test Mode1, write new count during counting =======
+# -- Gate is low before writing to control word
+# -- Write 1234 to Counter 0, counter should remain constant 'N' in datasheets
+# Status0 : OUT=1 NULL_CNT=1 LMSB MODE1 BCD    CNT=0000
+# Counter Element 0 = 0000 OUT0=1
+# Counter Element 0 = 0000 OUT0=1
+# Counter Element 0 = 0000 OUT0=1
+# -- Gate is asserted, counter should reload to 1234 and starts counting.....
+# Counter Element 0 = 0000 OUT0=1
+# Counter Element 0 = 1234 OUT0=0
+# Counter Element 0 = 1233 OUT0=0
+# Counter Element 0 = 1232 OUT0=0
+# -- Write new counter value 7654, counter should continue counting...
+# Counter Element 0 = 1230 OUT0=0
+# Counter Element 0 = 1229 OUT0=0
+# Counter Element 0 = 1228 OUT0=0
+# Counter Element 0 = 1227 OUT0=0
+# -- ReAssert Gate, counter should reload to 7654 and starts counting.....
+# Counter Element 0 = 1226 OUT0=0
+# Counter Element 0 = 7654 OUT0=0
+# Counter Element 0 = 7653 OUT0=0
+# Counter Element 0 = 7652 OUT0=0
+# ======= Test31, Mode5, write new count during counting =======
+# -- Gate is high before writing to control word
+# Status0 : OUT=1 NULL_CNT=1 LSB  MODE5 BCD    CNT=51
+# -- Write 87 to Counter 0, counting is inhibited until rising edge gate
+# Counter Element 0 = 7651 OUT0=1
+# Counter Element 0 = 7651 OUT0=1
+# Counter Element 0 = 7651 OUT0=1
+# Counter Element 0 = 7651 OUT0=1
+# -- Gate is asserted (rising edge), counter loads and starts counting
+# Counter Element 0 = 7651 OUT0=1
+# Counter Element 0 = 0087 OUT0=1
+# Counter Element 0 = 0086 OUT0=1
+# Counter Element 0 = 0085 OUT0=1
+# Counter Element 0 = 0084 OUT0=1
+# Counter Element 0 = 0083 OUT0=1
+# -- Write new counter value 98, counter should continue counting...
+# Counter Element 0 = 0082 OUT0=1
+# Counter Element 0 = 0081 OUT0=1
+# Counter Element 0 = 0080 OUT0=1
+# Counter Element 0 = 0079 OUT0=1
+# -- Assert gate0 (rising edge), load new value (98)
+# Counter Element 0 = 0078 OUT0=1
+# Counter Element 0 = 0098 OUT0=1
+# Counter Element 0 = 0097 OUT0=1
+# Counter Element 0 = 0096 OUT0=1
+# Counter Element 0 = 0095 OUT0=1
+# ======= Test32 Mode0 CNT0, LSB/MSB, combined Status/Latch Readback command =======
+# -- Write 1004 to Counter 0
+# Counter Element 0 = 0094 OUT0=0
+# Counter Element 0 = 1004 OUT0=0
+# Counter Element 0 = 1003 OUT0=0
+# Counter Element 0 = 1002 OUT0=0
+# -- Issue Read-Back Status/Latch Command, but do not yet read it 
+# Counter Element 0 = 1001 OUT0=0
+# Counter Element 0 = 1000 OUT0=0
+# Counter Element 0 = 0FFF OUT0=0
+# Counter Element 0 = 0FFE OUT0=0
+# -- First Counter read returns the status = 30
+# Counter Element 0 = 0FFD OUT0=0
+# Counter Element 0 = 0FFC OUT0=0
+# Counter Element 0 = 0FFB OUT0=0
+# -- Second Counter read returns the latched value = 1001
+# Counter Element 0 = 0FFA OUT0=0
+# Counter Element 0 = 0FF9 OUT0=0
+# Counter Element 0 = 0FF8 OUT0=0
+# Counter Element 0 = 0FF7 OUT0=0
+# ** Failure: ***** END OF TEST *****
