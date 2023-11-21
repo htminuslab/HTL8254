@@ -9,7 +9,7 @@
 -- Library       : I8254                                                     --
 --                                                                           --
 -- Version       : 1.0  20/01/2002   Created HT-LAB                          --
---               : 1.2  30/11/2023   cleaned and uploaded to github          --
+--               : 1.2  21/11/2023   cleaned and uploaded to github          --
 -------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;

@@ -18,7 +18,7 @@
 --               :                   mode set and counter init value         --
 --               : 1.1  30/12/2009   Cleaned up code                         --
 --               : 1.1a 09/01/2010   Fixed M1/M5 counter rewrite issue       --
---               : 1.2  30/11/2023   cleaned and uploaded to github          --
+--               : 1.2  21/11/2023   cleaned and uploaded to github          --
 -------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
